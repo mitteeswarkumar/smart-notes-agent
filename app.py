@@ -19,13 +19,88 @@ from gemini_helper import generate_summary, answer_question, explain_simply
 
 # st.set_page_config() customizes the browser tab title and layout.
 # This must be the FIRST streamlit command in the script.
-st.set_page_config(page_title="Smart Notes Agent", page_icon="📄")
+# layout="wide" gives us more horizontal space to work with.
+st.set_page_config(page_title="Smart Notes Agent", page_icon="📄", layout="wide")
 
-# st.title() displays a large heading at the top of the page.
-st.title("📄 Smart Notes Agent")
+# -----------------------------
+# CUSTOM COLORFUL STYLING
+# -----------------------------
+# Streamlit lets us inject raw CSS using st.markdown() with unsafe_allow_html=True.
+# "unsafe_allow_html" just means "trust this HTML/CSS, don't escape it as plain text."
+# We use this ONE time near the top to define colors/styles for the whole app.
+st.markdown("""
+    <style>
+    /* Change the overall page background to a soft gradient */
+    .stApp {
+        background: linear-gradient(180deg, #f6f5ff 0%, #ffffff 100%);
+    }
 
-# st.write() is a general-purpose function to display text (like print(), but on the web page).
-st.write("Upload a PDF, get a summary, ask questions, and understand tricky topics — all in simple English.")
+    /* Style the main title area with a colorful gradient card */
+    .title-card {
+        background: linear-gradient(90deg, #7F77DD 0%, #D4537E 100%);
+        padding: 1.5rem 2rem;
+        border-radius: 16px;
+        margin-bottom: 1.5rem;
+    }
+    .title-card h1 {
+        color: white !important;
+        margin: 0;
+    }
+    .title-card p {
+        color: #f0eaff;
+        margin: 0.3rem 0 0 0;
+    }
+
+    /* Colorful section headers - each feature gets its own accent color */
+    .section-summary {
+        background-color: #E1F5EE;
+        border-left: 6px solid #1D9E75;
+        padding: 0.8rem 1.2rem;
+        border-radius: 8px;
+        margin: 1.5rem 0 0.8rem 0;
+    }
+    .section-question {
+        background-color: #E6F1FB;
+        border-left: 6px solid #378ADD;
+        padding: 0.8rem 1.2rem;
+        border-radius: 8px;
+        margin: 1.5rem 0 0.8rem 0;
+    }
+    .section-explain {
+        background-color: #FAEEDA;
+        border-left: 6px solid #BA7517;
+        padding: 0.8rem 1.2rem;
+        border-radius: 8px;
+        margin: 1.5rem 0 0.8rem 0;
+    }
+    .section-summary h3, .section-question h3, .section-explain h3 {
+        margin: 0;
+        color: #2C2C2A;
+    }
+
+    /* Make buttons colorful and rounded */
+    .stButton > button {
+        background: linear-gradient(90deg, #7F77DD 0%, #534AB7 100%);
+        color: white;
+        border-radius: 8px;
+        border: none;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+    }
+    .stButton > button:hover {
+        background: linear-gradient(90deg, #534AB7 0%, #3C3489 100%);
+        color: white;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Build the colorful title banner using our "title-card" CSS class above.
+st.markdown("""
+    <div class="title-card">
+        <h1>📄 Smart Notes Agent</h1>
+        <p>Upload a PDF, get a summary, ask questions, and understand tricky topics — all in simple English.</p>
+    </div>
+""", unsafe_allow_html=True)
 
 
 # -----------------------------
@@ -76,7 +151,7 @@ if uploaded_file is not None:
 # STEP 2: GENERATE SUMMARY
 # -----------------------------
 
-st.header("📝 Get a Summary")
+st.markdown('<div class="section-summary"><h3>📝 Get a Summary</h3></div>', unsafe_allow_html=True)
 
 # st.button() displays a clickable button. It returns True only in the run
 # where the user just clicked it, otherwise False.
@@ -102,7 +177,7 @@ if st.button("Summarize PDF"):
 # STEP 3: ASK A QUESTION
 # -----------------------------
 
-st.header("❓ Ask a Question About the PDF")
+st.markdown('<div class="section-question"><h3>❓ Ask a Question About the PDF</h3></div>', unsafe_allow_html=True)
 
 # st.text_input() creates a single-line text box for the user to type into.
 user_question = st.text_input("Type your question here")
@@ -127,7 +202,7 @@ if st.button("Get Answer"):
 # STEP 4: EXPLAIN A DIFFICULT TOPIC SIMPLY
 # -----------------------------
 
-st.header("💡 Explain a Difficult Topic Simply")
+st.markdown('<div class="section-explain"><h3>💡 Explain a Difficult Topic Simply</h3></div>', unsafe_allow_html=True)
 
 # Another text box, this time for the topic the user finds confusing.
 topic_input = st.text_input("Enter a topic or term from the PDF you want explained simply")
